@@ -1,8 +1,8 @@
 @description('The name suffix for the ADX cluster')
 param suffix string
 
-@description('The location for the ADX cluster')
-param location string = 'Central US'
+@description('The location for the ADX cluster. Consider using eastus2 or westus2 for better pricing. See: https://azure.microsoft.com/en-us/pricing/details/data-explorer/')
+param location string
 
 resource adxCluster 'Microsoft.Kusto/clusters@2023-08-15' = {
   name: 'adx${suffix}'
