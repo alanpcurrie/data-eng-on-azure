@@ -1,0 +1,49 @@
+name: Deploy ADX Cluster
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'bicep/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'prod'
+        type: choice
+        options:
+          - dev
+          - test
+          - prod
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AZURE_SUBSCRIPTION: your-subscription-id
+  AZURE_RESOURCE_GROUP: your-resource-group
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy Bicep template
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ env.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+          template: ./bicep/main.bicep
+          parameters: ./bicep/parameters/${{ github.event.inputs.environment || 'prod' }}.bicepparam
+          failOnStdErr: false

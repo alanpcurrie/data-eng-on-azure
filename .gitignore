@@ -1,0 +1,28 @@
+# Bicep build artifacts
+*.json
+*.json.lock
+
+# Azure-related files
+*.azure*
+*.bicep.parameters.json
+
+# VS Code settings
+.vscode/
+*.code-workspace
+
+# Logs and temp files
+*.log
+*.bak
+*.tmp
+
+# Node.js (if using with CD pipelines)
+node_modules/
+dist/
+.npm/
+.npmrc
+.env
+
+# IDE-specific files
+.idea/
+.DS_Store
+Thumbs.db
