@@ -21,12 +21,6 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}      
-  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}     
-  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -34,18 +28,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Azure Login
+      - name: Azure Login (OIDC)
         uses: azure/login@v1
         with:
-          client-id: ${{ env.AZURE_CLIENT_ID }}
-          tenant-id: ${{ env.AZURE_TENANT_ID }}
-          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
 
-      - name: Deploy Bicep template
+      - name: Set Environment Variable
+        run: |
+          ENVIRONMENT=${{ github.event.inputs.environment }}
+          if [ -z "$ENVIRONMENT" ]; then ENVIRONMENT="prod"; fi
+          echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_ENV
+
+      - name: Deploy Bicep Template
         uses: azure/arm-deploy@v1
         with:
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           template: ./bicep/main.bicep
-          parameters: ./bicep/parameters/${{ github.event.inputs.environment || 'prod' }}.bicepparam
+          parameters: ./bicep/parameters/${{ env.ENVIRONMENT }}.bicepparam
           failOnStdErr: false
