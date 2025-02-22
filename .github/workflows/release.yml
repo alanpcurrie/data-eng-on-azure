@@ -9,8 +9,8 @@ permissions:
   contents: write
 
 jobs:
-  release:
-    name: Release
+  version:
+    name: Version
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout Repo
@@ -45,14 +45,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --strict-peer-dependencies
 
-      - name: Create Version Branch
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          version: pnpm version
-          commit: "chore: update versions"
-          title: "chore: update versions"
-          publish: echo "Version updated"
-          createGithubReleases: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Version and Tag
+        run: |
+          if [ -d ".changeset" ] && [ "$(ls -A .changeset/*.md 2>/dev/null)" ]; then
+            pnpm version
+            git push --follow-tags
+          fi

@@ -8,7 +8,7 @@
     "cs": "changeset",
     "format": "biome format --write .",
     "lint": "biome check",
-    "version": "changeset version"
+    "version": "changeset version && git add ."
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
