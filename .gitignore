@@ -1,7 +1,3 @@
-# Bicep build artifacts
-*.json
-*.json.lock
-
 # Azure-related files
 *.azure*
 *.bicep.parameters.json
@@ -26,3 +22,11 @@ dist/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Changesets
+.changeset/*.md
+!.changeset/config.json
+
+# Node.js
+node_modules/
+package-lock.json
