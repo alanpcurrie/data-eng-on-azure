@@ -12,5 +12,14 @@ module adxCluster 'modules/adx.bicep' = {
   }
 }
 
+module purviewAccount 'modules/purview.bicep' = {
+  name: 'purview-deployment'
+  params: {
+    suffix: env
+    location: location
+  }
+}
+
 output clusterName string = adxCluster.outputs.clusterName
 output clusterUri string = adxCluster.outputs.clusterUri
+output purviewName string = purviewAccount.outputs.purviewName
