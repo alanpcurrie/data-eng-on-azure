@@ -1,4 +1,4 @@
-.PHONY: help login deploy-prod deploy-dev lint clean validate changeset version release setup-changesets
+.PHONY: help login deploy-prod deploy-dev lint clean validate changeset version release setup-changesets create-release gh-auth
 
 # Variables
 RG ?= your-resource-group
@@ -30,9 +30,10 @@ deploy-dev: ## Deploy to development
 		--template-file bicep/main.bicep \
 		--parameters bicep/parameters/dev.bicepparam
 
-lint: ## Lint Bicep files
+lint: ## Lint Bicep files and JavaScript
 	az bicep lint bicep/main.bicep
 	az bicep lint bicep/modules/*.bicep
+	pnpm lint
 
 purview-roles: ## Assign Purview roles to the current user
 	az role assignment create \
@@ -55,15 +56,34 @@ list-purview: ## List Purview accounts
 		--resource-group $(RG) \
 		--output table
 
+# Release Management Commands
 changeset: ## Create a new changeset
-	npx changeset
+	pnpm cs
 
 version: ## Apply changesets to update versions
-	npx changeset version
+	pnpm changeset version
 
-release: ## Create a release
-	npx changeset tag
+prepare-release: lint changeset ## Prepare a new release by running lint and creating a changeset
+
+create-release: ## Create and push a new release with GitHub release and changelog
+	@echo "Creating release..."
+	pnpm changeset version
+	git add .
+	git commit -m "chore: version packages"
+	@VERSION=$$(node -p "require('./package.json').version"); \
+	echo "Tagging version $$VERSION"; \
+	git tag v$$VERSION; \
+	git push && git push --tags; \
+	echo "Creating GitHub release..."; \
+	gh release create v$$VERSION \
+		--title "Release v$$VERSION" \
+		--notes "$$(sed -n "/## $$VERSION/,/##/p" CHANGELOG.md | sed '$$d')" \
+		--verify-tag
+	@echo "Release v$$VERSION complete!"
 
 setup-changesets: ## Initialize changesets
-	npm install
-	npx changeset init
+	pnpm install
+	pnpm changeset init
+
+gh-auth: ## Authenticate with GitHub CLI
+	gh auth login

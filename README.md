@@ -61,14 +61,41 @@ Infrastructure as Code (IaC) repository for Azure Data Explorer (ADX) deployment
 
 ## Release Process
 
-1. Prepare release: `pnpm prepare-release`
-2. Review changeset files
-3. Create release PR using GitHub Actions
-4. After merge, release will be automated
+We use [changesets](https://github.com/changesets/changesets) to manage versions and changelogs. Here's how it works:
 
-For infrastructure changes:
-- Always add a changeset for bicep changes
-- Use 'infra:' or 'resource:' commit prefixes
+1. **Making Changes**
+   When you make changes, create a changeset to document what changed:
+   ```bash
+   make prepare-release
+   ```
+   This will:
+   - Run linting
+   - Prompt you to describe your changes
+   - Create a `.changeset/[name].md` file
+
+2. **Changeset Format**
+   Each changeset file looks like this:
+   ```md
+   ---
+   "azure-data-eng": patch | minor | major
+   ---
+
+   Description of your changes here.
+   - Added feature X
+   - Fixed bug Y
+   - Updated component Z
+   ```
+
+3. **Creating a Release**
+   When you're ready to release:
+   ```bash
+   make create-release
+   ```
+   This will:
+   - Convert changesets into CHANGELOG.md entries
+   - Bump version numbers
+   - Create a git tag
+   - Create a GitHub release with notes
 
 ## Release Management
 
