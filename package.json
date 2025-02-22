@@ -1,6 +1,6 @@
 {
-  "name": "azure-data-eng",
-  "private": true,
+  "name": "@alanpcurrie/azure-data-eng",
+  "private": false,
   "version": "0.1.0",
   "packageManager": "pnpm@10.4.1",
   "scripts": {
@@ -24,5 +24,8 @@
     "commitizen": {
       "path": "cz-conventional-changelog-emoji"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
