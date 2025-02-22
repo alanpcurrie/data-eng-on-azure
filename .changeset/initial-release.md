@@ -1,4 +1,6 @@
+---
 "azure-data-eng": major
+---
 
 Initial release of Azure Data Engineering Infrastructure as Code repository.
 
