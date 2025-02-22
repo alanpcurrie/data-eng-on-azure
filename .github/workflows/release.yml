@@ -46,13 +46,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --strict-peer-dependencies
 
-      - name: Create Release Pull Request or Publish
+      - name: Create Release Pull Request
         id: changesets
         uses: changesets/action@v1
         with:
           version: pnpm version
           commit: "chore: update versions"
           title: "chore: update versions"
-          publish: pnpm release
+          # Skip npm publish, only create GitHub release
+          publish: echo "Creating GitHub Release"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
