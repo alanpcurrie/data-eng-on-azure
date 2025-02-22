@@ -23,10 +23,6 @@ dist/
 .DS_Store
 Thumbs.db
 
-# Changesets
-.changeset/*.md
-!.changeset/config.json
-
 # Node.js
 node_modules/
 package-lock.json
