@@ -1,13 +1,12 @@
 # Azure Data Engineering Infrastructure
 
-Infrastructure as Code (IaC) repository for Azure Data Explorer (ADX) and Microsoft Purview deployment using Bicep.
+Infrastructure as Code (IaC) repository for Azure Data Explorer (ADX) deployment using Bicep.
 
 ![Repository Structure](az-data-eng-repo.webp)
 
 ## Components
 
 - Azure Data Explorer (ADX): Data exploration and analytics service
-- Microsoft Purview: Data governance and discovery service
 
 ## Project Structure
 
@@ -98,8 +97,6 @@ This project uses several tools to maintain a consistent and automated release p
 
 The service principal needs the following roles:
 - Contributor on the target resource group
-- Purview Data Curator
-- Purview Data Source Administrator
 
 ## Deployment Process
 
@@ -111,3 +108,12 @@ The service principal needs the following roles:
 2. Trigger the deployment workflow:
    - Push changes to the `main` branch.
    - Or manually trigger the workflow from the GitHub Actions tab, specifying the environment (`dev`, `test`, or `prod`).
+
+## Troubleshooting
+
+### Template Validation Failures
+
+If template validation fails:
+1. Verify your service principal has the required permissions
+2. Check the tracking ID in the error message for Azure support
+3. Review the inner errors for specific validation issues
