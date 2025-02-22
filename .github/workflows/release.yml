@@ -44,7 +44,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --strict-peer-dependencies
+        run: pnpm install --strict-peer-dependencies
 
       - name: Create Release Pull Request or Publish
         id: changesets
