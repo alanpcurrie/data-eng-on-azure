@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 jobs:
   release:
@@ -53,7 +54,6 @@ jobs:
           version: pnpm version
           commit: "chore: update versions"
           title: "chore: update versions"
-          # Skip npm publish, only create GitHub release
           publish: echo "Creating GitHub Release"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
