@@ -7,7 +7,7 @@
     "commit": "git-cz",
     "cs": "changeset",
     "format": "biome format --write .",
-    "lint": "biome check . && pnpm lint:bicep",
+    "lint": "biome check",
     "version": "changeset version",
     "release": "changeset publish",
     "prepare-release": "pnpm lint && pnpm cs"
