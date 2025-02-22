@@ -5,10 +5,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Specify all required permissions
 permissions:
   contents: write
   pull-requests: write
   issues: write
+  id-token: write
+  statuses: write
 
 jobs:
   release:
@@ -55,5 +58,7 @@ jobs:
           commit: "chore: update versions"
           title: "chore: update versions"
           publish: echo "Creating GitHub Release"
+          setupGitUser: true
+          createGithubReleases: true
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
